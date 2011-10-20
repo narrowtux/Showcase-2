@@ -1,0 +1,9 @@
+name: Showcase
+version: 2.0a1
+author: narrowtux
+main: com.narrowtux.showcase2.ShowcaseMain
+commands:
+  showcase:
+    aliases: [sc]
+    description: Access to all showcase commands
+softdepends: [NarrowtuxLib]
