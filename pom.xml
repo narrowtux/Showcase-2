@@ -55,6 +55,16 @@
             </snapshots>
         </repository>
         <repository>
+            <id>bukkit-repo</id>
+            <url>http://repo.bukkit.org</url>
+            <releases>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
+            <snapshots>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
             <id>craftfire-dbrepo</id>
             <url>http://db.craftfire.com/repo</url>
         </repository>
