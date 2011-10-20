@@ -252,7 +252,7 @@ public class ShowcaseMain extends JavaPlugin {
 	 * @param msg
 	 */
 	public static void doLog(String msg, Level level) {
-		if(level.intValue() < getConfig().getMinimumLogLevel()){
+		if(level.intValue() < getCustomConfig().getMinimumLogLevel()){
 			return;
 		}
 		String print = "[";
@@ -306,7 +306,7 @@ public class ShowcaseMain extends JavaPlugin {
 		getServer().getConsoleSender().sendMessage(print);
 	}
 	
-	public static Configuration getConfig(){
+	public static Configuration getCustomConfig(){
 		return instance.config;
 	}
 }

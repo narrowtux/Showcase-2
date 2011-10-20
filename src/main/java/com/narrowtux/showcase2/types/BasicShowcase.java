@@ -14,7 +14,7 @@ public class BasicShowcase extends Showcase {
 
 	@Override
 	public boolean onCreate() {
-		if(ShowcaseMain.getConfig().isBasicTakingItem()) {
+		if(ShowcaseMain.getCustomConfig().isBasicTakingItem()) {
 			ItemStack remove = getType().clone();
 			remove.setAmount(1);
 			getOwner().getPlayer().getInventory().removeItem(remove);
@@ -24,7 +24,7 @@ public class BasicShowcase extends Showcase {
 
 	@Override
 	public boolean onRemove() {
-		if(ShowcaseMain.getConfig().isBasicTakingItem()) {
+		if(ShowcaseMain.getCustomConfig().isBasicTakingItem()) {
 			ItemStack add = getType().clone();
 			add.setAmount(1);
 			if(getOwner().getPlayer().getInventory().addItem(add).size()>0){
