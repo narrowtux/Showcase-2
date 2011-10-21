@@ -1,6 +1,10 @@
 package com.narrowtux.showcase2.types;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 
 import org.bukkit.Chunk;
@@ -15,7 +19,7 @@ import com.narrowtux.showcase2.ShowcasePlayer;
 
 public class Showcase {
 	private Block block = null;
-	private ShowcasePlayer owner;
+	private Set<ShowcasePlayer> owners = new HashSet<ShowcasePlayer>();
 	private ItemStack type = new ItemStack(0);
 	protected Item item;
 	private ShowcaseType showcaseType = null;
@@ -30,8 +34,8 @@ public class Showcase {
 		
 		this.chunk = block.getChunk();
 		
-		this.owner = owner;
-		this.owner.addShowcase(this);
+		this.owners.add(owner);
+		owner.addShowcase(this);
 		
 		spawn();
 	}
@@ -81,20 +85,39 @@ public class Showcase {
 		spawn();
 	}
 	
-	public ShowcasePlayer getOwner() {
-		return owner;
+	/**
+	 * Gets all owners
+	 * @return all the owners of this showcase
+	 */
+	public Set<ShowcasePlayer> getOwners() {
+		return Collections.unmodifiableSet(owners);
+	}
+	
+	/**
+	 * Gets if given player is an owner.
+	 * @param player
+	 * @return
+	 */
+	public boolean isOwner(ShowcasePlayer player) {
+		return owners.contains(player);
 	}
 	
 	/**
 	 * Sets the new owner of the showcase
 	 * @param owner
 	 */
-	public void setOwner(ShowcasePlayer owner) {
-		if(this.owner != null) {
-			this.owner.removeShowcase(this);
-		}
-		this.owner = owner;
-		this.owner.addShowcase(this);
+	public void addOwner(ShowcasePlayer owner) {
+		owner.addShowcase(this);
+		owners.add(owner);
+	}
+	
+	/**
+	 * Removes the owner from owners list
+	 * @param owner
+	 */
+	public void removeOwner(ShowcasePlayer owner) {
+		owner.removeShowcase(this);
+		owners.remove(owner);
 	}
 	
 	/**
@@ -116,7 +139,7 @@ public class Showcase {
 	 * Called when the showcase was created-
 	 * @return false if the item shouldn't be created
 	 */
-	public boolean onCreate() {
+	public boolean onCreate(ShowcasePlayer player) {
 		
 		return true;
 	}
@@ -125,7 +148,7 @@ public class Showcase {
 	 * Called when the showcase should be removed
 	 * @return false if the item shouldn't be removed
 	 */
-	public boolean onRemove() {
+	public boolean onRemove(ShowcasePlayer player) {
 		
 		return true;
 	}

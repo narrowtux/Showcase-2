@@ -6,11 +6,17 @@ import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.narrowtux.showcase2.ShowcaseMain;
+import com.narrowtux.showcase2.ShowcasePlayer;
 
 public class ShowcaseBlockListener extends BlockListener {
 	@Override
 	public void onBlockBreak(BlockBreakEvent event) {
-		event.setCancelled(event.isCancelled() || ShowcaseMain.getInstance().getShowcase(event.getBlock()) != null);
+		ShowcasePlayer player = ShowcasePlayer.getPlayer(event.getPlayer().getName());
+		if(!player.canBreak()){
+			event.setCancelled(true);
+		} else {
+			event.setCancelled(event.isCancelled() || ShowcaseMain.getInstance().getShowcase(event.getBlock()) != null);
+		}
 	}
 
 	@Override

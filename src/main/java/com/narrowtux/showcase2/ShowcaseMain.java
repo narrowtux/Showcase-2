@@ -139,7 +139,9 @@ public class ShowcaseMain extends JavaPlugin {
 	}
 
 	public void removeShowcase(Showcase sc) {
-		sc.getOwner().removeShowcase(sc);
+		for(ShowcasePlayer player:sc.getOwners()) {
+			player.removeShowcase(sc);
+		}
 		showcases.remove(sc.getBlock());
 	}
 	
@@ -163,7 +165,10 @@ public class ShowcaseMain extends JavaPlugin {
 				int material = (Integer)item.get("material");
 				int data = (Integer)item.get("data");
 				String scType = (String)item.get("type");
-				String owner = (String)item.get("owner");
+				
+				ArrayList<String> owners = (ArrayList<String>) item.get("owners");
+				
+				
 				World w = new WorldCreator(worldName).environment(Environment.getEnvironment(environment)).createWorld();
 				if(w == null) {
 					doLog("Couldn't find world "+worldName, Level.SEVERE);
@@ -180,8 +185,11 @@ public class ShowcaseMain extends JavaPlugin {
 					doLog("Couldn't find type: "+scType, Level.SEVERE);
 					continue;
 				}
-				ShowcasePlayer player = ShowcasePlayer.getPlayer(owner);
+				ShowcasePlayer player = ShowcasePlayer.getPlayer(owners.get(0));
 				Showcase sc = new Showcase(b, stack, player);
+				for(String name:owners) {
+					sc.addOwner(ShowcasePlayer.getPlayer(name));
+				}
 				sc.setShowcaseType(type);
 				try{
 					HashMap<String, Object> extra = (HashMap<String, Object>) item.get("extra");
@@ -201,6 +209,9 @@ public class ShowcaseMain extends JavaPlugin {
 			return;
 		} catch (NullPointerException e) {
 			e.printStackTrace();
+		} catch (ClassCastException e) {
+			doLog("Invalid file.", Level.SEVERE);
+			e.printStackTrace();
 		}
 		doLog("Loading done.", Level.FINER);
 	}
@@ -217,7 +228,13 @@ public class ShowcaseMain extends JavaPlugin {
 			item.put("z", sc.getBlock().getZ());
 			item.put("world", sc.getBlock().getWorld().getName());
 			item.put("environment", sc.getBlock().getWorld().getEnvironment().getId());
-			item.put("owner", sc.getOwner().getName());
+			
+			ArrayList<String> owners = new ArrayList<String>();
+			for(ShowcasePlayer owner:sc.getOwners()) {
+				owners.add(owner.getName());
+			}
+			item.put("owners", owners);
+			
 			item.put("material", sc.getType().getTypeId());
 			item.put("data", sc.getType().getDurability());
 			item.put("type", sc.getShowcaseType().getName());

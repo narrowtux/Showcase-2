@@ -29,7 +29,7 @@ public class ShowcasePlayerListener extends PlayerListener {
 				if(player.getRequestedType() != null) {
 					ShowcaseType type = player.getRequestedType();
 					sc = type.createShowcase(event.getClickedBlock(), event.getPlayer().getItemInHand(), player, player.getTypeArguments());
-					if(!sc.onCreate()) {
+					if(!sc.onCreate(player)) {
 						sc.remove();
 					} else {
 						ShowcaseCreationEvent sce = new ShowcaseCreationEvent(sc);
@@ -58,8 +58,8 @@ public class ShowcasePlayerListener extends PlayerListener {
 			break;
 		case RIGHT_CLICK_BLOCK:
 			sc = ShowcaseMain.getInstance().getShowcase(event.getClickedBlock());
-			if(sc != null && event.getPlayer().isSneaking() && player.equals(sc.getOwner())) {
-				if(sc.onRemove()) {
+			if(sc != null && event.getPlayer().isSneaking() && sc.isOwner(player)) {
+				if(sc.onRemove(player)) {
 					ShowcaseRemoveEvent sre = new ShowcaseRemoveEvent(sc);
 					Bukkit.getPluginManager().callEvent(sre);
 					if(!sre.isCancelled()) {

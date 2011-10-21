@@ -13,22 +13,22 @@ public class BasicShowcase extends Showcase {
 	}
 
 	@Override
-	public boolean onCreate() {
+	public boolean onCreate(ShowcasePlayer player) {
 		if(ShowcaseMain.getCustomConfig().isBasicTakingItem()) {
 			ItemStack remove = getType().clone();
 			remove.setAmount(1);
-			getOwner().getPlayer().getInventory().removeItem(remove);
+			player.getPlayer().getInventory().removeItem(remove);
 		}
 		return true;
 	}
 
 	@Override
-	public boolean onRemove() {
+	public boolean onRemove(ShowcasePlayer player) {
 		if(ShowcaseMain.getCustomConfig().isBasicTakingItem()) {
 			ItemStack add = getType().clone();
 			add.setAmount(1);
-			if(getOwner().getPlayer().getInventory().addItem(add).size()>0){
-				getOwner().sendMessage("You can't hold that item so the showcase wasn't removed");
+			if(player.getPlayer().getInventory().addItem(add).size()>0){
+				player.sendMessage("You can't hold that item so the showcase wasn't removed");
 				return false;
 			}
 		}

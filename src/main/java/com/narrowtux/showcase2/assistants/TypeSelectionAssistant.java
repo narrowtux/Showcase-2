@@ -25,8 +25,8 @@ public class TypeSelectionAssistant extends Assistant {
 		this.block = b;
 		this.stack = s;
 		this.player = p;
+		player.setCanBreak(false);
 		addPage(new AssistantPage(this) {
-			
 			{
 				setTitle("Type selection");
 				String text = "";
@@ -46,10 +46,11 @@ public class TypeSelectionAssistant extends Assistant {
 				text = text.trim();
 				text = text.toLowerCase();
 				ShowcaseType type = ShowcaseType.getType(text);
+				player.setCanBreak(true);
 				if(type != null) {
 					Showcase sc = type.createShowcase(block, stack, player, null);
 					sc.setShowcaseType(type);
-					if(!sc.onCreate()) {
+					if(!sc.onCreate(player)) {
 						sc.remove();
 						return AssistantAction.CANCEL;
 					}

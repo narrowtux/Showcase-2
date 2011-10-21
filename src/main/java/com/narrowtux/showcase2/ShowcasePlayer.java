@@ -18,6 +18,7 @@ public class ShowcasePlayer {
 	private boolean requestedBuild = false;
 	private ShowcaseType requestedType = null;
 	private String typeArguments[];
+	private boolean breaking = true;
 	
 	private ShowcasePlayer(String name) {
 		this.name = name;
@@ -88,5 +89,13 @@ public class ShowcasePlayer {
 			return name.equals(((ShowcasePlayer)arg0).name);
 		}
 		return false;
+	}
+
+	public void setCanBreak(boolean b) {
+		breaking = b;
+	}
+	
+	public boolean canBreak() {
+		return breaking;
 	}
 }
