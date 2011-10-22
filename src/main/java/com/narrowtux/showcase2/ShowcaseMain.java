@@ -28,6 +28,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.yaml.snakeyaml.Yaml;
 
+import com.narrowtux.showcase2.command.AbstractCommandHandler;
+import com.narrowtux.showcase2.command.AddCommandHandler;
+import com.narrowtux.showcase2.command.TypesCommandHandler;
 import com.narrowtux.showcase2.listeners.ShowcaseBlockListener;
 import com.narrowtux.showcase2.listeners.ShowcaseDropChestListener;
 import com.narrowtux.showcase2.listeners.ShowcasePlayerListener;
@@ -56,6 +59,7 @@ public class ShowcaseMain extends JavaPlugin {
 		ShowcaseMain.doLog("Enable started", Level.FINE);
 
 		PluginManager pm = getServer().getPluginManager();
+		
 		//Handle dependencies
 		dropchest = pm.getPlugin("DropChest") != null;
 		
@@ -75,6 +79,10 @@ public class ShowcaseMain extends JavaPlugin {
 		//Register timers
 		BukkitScheduler scheduler = getServer().getScheduler();
 		scheduler.scheduleSyncRepeatingTask(this, new Respawner(), 20, 20);
+		
+		//Register commands
+		AbstractCommandHandler.registerHandler(new AddCommandHandler());
+		AbstractCommandHandler.registerHandler(new TypesCommandHandler());
 		
 		//Register default types
 		new BasicType();
@@ -102,47 +110,7 @@ public class ShowcaseMain extends JavaPlugin {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		ShowcasePlayer player = null;
-		if(sender instanceof Player) {
-			player = ShowcasePlayer.getPlayer(((Player)sender).getName());
-		}
-		boolean ingame = false;
-		if(command.getName().equals("showcase")) {
-			if(args.length >= 1 && args[0].equals("add")) {
-				if(player != null) {
-					player.requestBuild();
-					if(args.length >= 2) {
-						String type = args[1];
-						ShowcaseType shty = ShowcaseType.getType(type);
-						if(shty == null) {
-							player.sendMessage("The type '"+shty+"' does not exist. Type /sc types to get a list.");
-							return true;
-						}
-						String typeargs[] = null;
-						if(args.length >= 3) {
-							typeargs = new String[args.length-2];
-							for(int i = 2; i<args.length; i++){
-								typeargs[i-2] = args[i];
-							}
-						}
-						
-						player.setRequestedType(shty, typeargs);
-					}
-					player.sendMessage("Click on a slab to create a showcase with the item you're holding.");
-					return true;
-				} else {
-					ingame = true;
-				}
-			}
-			if(args.length >= 1 && args[0].equals("types")) {
-				sender.sendMessage("TODO");
-				return true;
-			}
-		}
-		if(ingame) {
-			sender.sendMessage("You can use this command ingame only.");
-		}
-		return false;
+		return AbstractCommandHandler.handleCommand(sender, command, label, args);
 	}
 
 	public static ShowcaseMain getInstance() {
