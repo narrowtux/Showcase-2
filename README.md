@@ -39,7 +39,7 @@ Please follow the above conventions if you want your pull requests accepted.
 
 [Project Logo]: http://www.gravatar.com/avatar/f110a5b8feacea25275521f4efd0d7f2?s=148
 [License]: http://www.gnu.org/licenses/lgpl.html
-[Forum]: http://forums.bukkit.org/threads/3835/
+[Forum]: http://forums.bukkit.org/threads/42508/
 [GitHub]: https://github.com/narrowtux/Showcase2
 [Jenkins]: http://ci.craftfire.com/job/Showcase2
 [Issues]: https://github.com/narrowtux/Showcase2/issues

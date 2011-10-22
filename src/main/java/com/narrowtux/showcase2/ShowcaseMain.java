@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.World.Environment;
@@ -36,7 +37,7 @@ import com.narrowtux.showcase2.types.ShowcaseType;
 
 public class ShowcaseMain extends JavaPlugin {
 	private static ShowcaseMain instance;
-	private HashMap<Block, Showcase> showcases = new HashMap<Block, Showcase>();
+	private HashMap<Location, Showcase> showcases = new HashMap<Location, Showcase>();
 	private ShowcaseBlockListener blockListener = new ShowcaseBlockListener();
 	private ShowcasePlayerListener playerListener = new ShowcasePlayerListener();
 	private ShowcaseWorldListener worldListener = new ShowcaseWorldListener();
@@ -74,7 +75,13 @@ public class ShowcaseMain extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		save();
+		try {
+			save();
+		} catch (Exception e) {
+			doLog("Saving failed, give this log to narrowtux. Some Showcases could be lost!", Level.SEVERE);
+			e.printStackTrace();
+			doLog("End of log.", Level.SEVERE);
+		}
 		for(Showcase sc:showcases.values()) {
 			sc.removeItem();
 		}
@@ -131,18 +138,18 @@ public class ShowcaseMain extends JavaPlugin {
 	}
 
 	public Showcase getShowcase(Block block) {
-		return showcases.get(block);
+		return showcases.get(block.getLocation());
 	}
 	
 	public void addShowcase(Showcase sc) {
-		showcases.put(sc.getBlock(), sc);
+		showcases.put(sc.getBlock().getLocation(), sc);
 	}
 
 	public void removeShowcase(Showcase sc) {
 		for(ShowcasePlayer player:sc.getOwners()) {
 			player.removeShowcase(sc);
 		}
-		showcases.remove(sc.getBlock());
+		showcases.remove(sc.getBlock().getLocation());
 	}
 	
 	public Collection<Showcase> getAllShowcases() {

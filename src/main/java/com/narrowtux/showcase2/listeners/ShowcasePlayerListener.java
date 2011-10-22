@@ -29,6 +29,7 @@ public class ShowcasePlayerListener extends PlayerListener {
 				if(player.getRequestedType() != null) {
 					ShowcaseType type = player.getRequestedType();
 					sc = type.createShowcase(event.getClickedBlock(), event.getPlayer().getItemInHand(), player, player.getTypeArguments());
+					sc.setShowcaseType(type);
 					if(!sc.onCreate(player)) {
 						sc.remove();
 					} else {

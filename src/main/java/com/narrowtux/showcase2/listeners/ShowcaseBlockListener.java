@@ -26,5 +26,10 @@ public class ShowcaseBlockListener extends BlockListener {
 				event.setCancelled(true);
 			}
 		}
+		if(event.getBlockReplacedState().getType().equals(Material.DOUBLE_STEP)) {
+			if(ShowcaseMain.getInstance().getShowcase(event.getBlockReplacedState().getBlock()) != null) {
+				event.setCancelled(true);
+			}
+		}
 	}
 }
