@@ -29,6 +29,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.yaml.snakeyaml.Yaml;
 
 import com.narrowtux.showcase2.listeners.ShowcaseBlockListener;
+import com.narrowtux.showcase2.listeners.ShowcaseDropChestListener;
 import com.narrowtux.showcase2.listeners.ShowcasePlayerListener;
 import com.narrowtux.showcase2.listeners.ShowcaseWorldListener;
 import com.narrowtux.showcase2.types.BasicType;
@@ -41,7 +42,10 @@ public class ShowcaseMain extends JavaPlugin {
 	private ShowcaseBlockListener blockListener = new ShowcaseBlockListener();
 	private ShowcasePlayerListener playerListener = new ShowcasePlayerListener();
 	private ShowcaseWorldListener worldListener = new ShowcaseWorldListener();
+	private ShowcaseDropChestListener dropChestListener = null; //Init when it's sure that dropchest is available
 	private Configuration config;
+	
+	private boolean dropchest = false;
 	
 	@Override
 	public void onEnable() {
@@ -50,15 +54,23 @@ public class ShowcaseMain extends JavaPlugin {
 		config = new Configuration(new File(getDataFolder(), "showcase.cfg"));
 		
 		ShowcaseMain.doLog("Enable started", Level.FINE);
+
+		PluginManager pm = getServer().getPluginManager();
+		//Handle dependencies
+		dropchest = pm.getPlugin("DropChest") != null;
 		
 		//Register event
-		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Normal, instance);
 		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Normal, instance);
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Normal, instance);
 		pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Normal, instance);
 		pm.registerEvent(Type.CHUNK_LOAD, worldListener, Priority.Normal, instance);
 		pm.registerEvent(Type.CHUNK_UNLOAD, worldListener, Priority.Normal, instance);
+		if(dropchest) {
+			doLog("Found DropChest", Level.INFO);
+			dropChestListener = new ShowcaseDropChestListener();
+			pm.registerEvent(Type.CUSTOM_EVENT, dropChestListener, Priority.Highest, instance);
+		}
 		
 		//Register timers
 		BukkitScheduler scheduler = getServer().getScheduler();
