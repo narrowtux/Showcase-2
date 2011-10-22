@@ -22,8 +22,8 @@ public class TypesCommandHandler extends AbstractCommandHandler {
 				types+=", ";
 			}
 			i++;
-			sender.sendMessage(types);
 		}
+		sender.sendMessage(types);
 		return true;
 	}
 

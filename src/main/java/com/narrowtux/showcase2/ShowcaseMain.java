@@ -36,6 +36,7 @@ import com.narrowtux.showcase2.listeners.ShowcaseDropChestListener;
 import com.narrowtux.showcase2.listeners.ShowcasePlayerListener;
 import com.narrowtux.showcase2.listeners.ShowcaseWorldListener;
 import com.narrowtux.showcase2.types.BasicType;
+import com.narrowtux.showcase2.types.ShopType;
 import com.narrowtux.showcase2.types.Showcase;
 import com.narrowtux.showcase2.types.ShowcaseType;
 
@@ -86,6 +87,7 @@ public class ShowcaseMain extends JavaPlugin {
 		
 		//Register default types
 		ShowcaseType.registerType(new BasicType());
+		ShowcaseType.registerType(new ShopType());
 		
 		//Load stuff
 		load();
@@ -173,11 +175,11 @@ public class ShowcaseMain extends JavaPlugin {
 					continue;
 				}
 				ShowcasePlayer player = ShowcasePlayer.getPlayer(owners.get(0));
-				Showcase sc = new Showcase(b, stack, player);
+				Showcase sc = type.createShowcase(b, stack, player, new String[0]);
+				sc.setShowcaseType(type);
 				for(String name:owners) {
 					sc.addOwner(ShowcasePlayer.getPlayer(name));
 				}
-				sc.setShowcaseType(type);
 				try{
 					HashMap<String, Object> extra = (HashMap<String, Object>) item.get("extra");
 					if(extra != null) {

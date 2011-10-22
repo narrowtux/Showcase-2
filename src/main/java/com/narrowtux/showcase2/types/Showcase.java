@@ -125,6 +125,7 @@ public class Showcase {
 	 * @param player the player who clicked on this showcase
 	 */
 	public void onLeftClick(ShowcasePlayer player) {
+		ShowcaseMain.doLog("Generic Click", Level.FINE);
 	}
 	
 	/**
@@ -132,6 +133,7 @@ public class Showcase {
 	 * @param player the player who clicked on this showcase
 	 */
 	public void onRightClick(ShowcasePlayer player) {
+		ShowcaseMain.doLog("Generic RightClick", Level.FINE);
 		
 	}
 	

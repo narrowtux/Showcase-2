@@ -7,9 +7,13 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
+import com.narrowtux.narrowtuxlib.NarrowtuxLib;
 import com.narrowtux.showcase2.types.Showcase;
 import com.narrowtux.showcase2.types.ShowcaseType;
+import com.nijikokun.register.payment.Method.MethodAccount;
 
 public class ShowcasePlayer {
 	private String name;
@@ -97,5 +101,41 @@ public class ShowcasePlayer {
 	
 	public boolean canBreak() {
 		return breaking;
+	}
+
+	public int getAmountOfType(ItemStack stack) {
+		int amount = 0;
+		for(ItemStack item:getPlayer().getInventory().getContents()) {
+			if(item == null) continue;
+			if(item.getTypeId() == 0) continue;
+			if(item.getTypeId() == stack.getTypeId() && item.getDurability() == stack.getDurability()) {
+				amount += item.getAmount();
+			}
+		}
+		return amount;
+	}
+
+	public int removeItems(ItemStack remove) {
+		PlayerInventory inv = getPlayer().getInventory();
+		HashMap<Integer, ItemStack> res = inv.removeItem(remove);
+		if(res.size() == 0) {
+			return 0;
+		} else {
+			return res.get(0).getAmount();
+		}
+	}
+	
+	public int addItems(ItemStack add) {
+		PlayerInventory inv = getPlayer().getInventory();
+		HashMap<Integer, ItemStack> res = inv.addItem(add);
+		if(res.size() == 0) {
+			return 0;
+		} else {
+			return res.get(0).getAmount();
+		}
+	}
+
+	public MethodAccount getAccount() {
+		return NarrowtuxLib.getMethod().getAccount(getName());
 	}
 }

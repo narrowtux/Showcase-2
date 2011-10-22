@@ -22,7 +22,7 @@ public class AddCommandHandler extends AbstractCommandHandler {
 				String typeargs[] = null;
 				if(args.length >= 2) {
 					typeargs = new String[args.length-1];
-					for(int i = 2; i<args.length; i++){
+					for(int i = 1; i<args.length; i++){
 						typeargs[i-1] = args[i];
 					}
 				}
