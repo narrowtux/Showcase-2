@@ -13,7 +13,6 @@ public abstract class ShowcaseType {
 	private String name;
 	
 	public ShowcaseType(String name) {
-		types.put(name, this);
 		this.name = name;
 	}
 	
@@ -38,4 +37,8 @@ public abstract class ShowcaseType {
 	 * @return a showcase object
 	 */
 	public abstract Showcase createShowcase(Block block, ItemStack stack, ShowcasePlayer player, String args[]);
+	
+	public static void registerType(ShowcaseType type) {
+		types.put(type.getName(), type);
+	}
 }

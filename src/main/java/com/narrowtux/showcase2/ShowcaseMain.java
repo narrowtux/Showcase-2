@@ -85,7 +85,7 @@ public class ShowcaseMain extends JavaPlugin {
 		AbstractCommandHandler.registerHandler(new TypesCommandHandler());
 		
 		//Register default types
-		new BasicType();
+		ShowcaseType.registerType(new BasicType());
 		
 		//Load stuff
 		load();
