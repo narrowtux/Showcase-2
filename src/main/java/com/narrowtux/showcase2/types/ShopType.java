@@ -20,6 +20,7 @@ public class ShopType extends ShowcaseType {
 	public Showcase createShowcase(Block block, ItemStack stack, ShowcasePlayer player, String[] args) {
 		ShopShowcase sh = new ShopShowcase(block, stack, player);
 		if(args.length >= 2) {
+			sh.setInit(true); //Set inited by arguments so no assistant will ever appear.
 			//arguments: amount buyprice sellprice maxamount
 			int pa = player.getAmountOfType(stack);
 			ShowcaseMain.doLog("player has "+pa, Level.FINE);

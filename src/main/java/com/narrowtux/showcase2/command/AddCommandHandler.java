@@ -19,7 +19,7 @@ public class AddCommandHandler extends AbstractCommandHandler {
 					player.sendMessage("The type '"+shty+"' does not exist. Type /sc types to get a list.");
 					return true;
 				}
-				String typeargs[] = null;
+				String typeargs[] = new String[0];
 				if(args.length >= 2) {
 					typeargs = new String[args.length-1];
 					for(int i = 1; i<args.length; i++){

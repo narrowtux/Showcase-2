@@ -79,28 +79,35 @@ public class ShopShowcase extends Showcase {
 
 	@Override
 	public void onRightClick(ShowcasePlayer player) {
-		//TODO: Setup assistant
+		if(isOwner(player)) {
+			ShopSetupAssistant assistant = new ShopSetupAssistant(player, this);
+			assistant.start();
+		}
 	}
 
 	@Override
 	public boolean onCreate(ShowcasePlayer player) {
-		if(!init) {
-			//TODO: Setup assistant
+		if(!isInit()) {
+			ShopSetupAssistant assistant = new ShopSetupAssistant(player, this);
+			assistant.start();
 		}
 		return true;
 	}
 
 	@Override
 	public boolean onRemove(ShowcasePlayer player) {
-		ItemStack add = getType().clone();
-		add.setAmount(getAmount());
-		int not = player.addItems(add);
-		if(not > 0) {
-			add.setAmount(not);
-			Location loc = player.getPlayer().getLocation();
-			loc.getWorld().dropItemNaturally(loc, add);
-			player.sendMessage(not+" items didn't fit into inventory. I dropped them.");
-		}
 		return true;
+	}
+
+	public boolean isRemoved() {
+		return Showcase.getShowcase(getItem()) == null;
+	}
+
+	public boolean isInit() {
+		return init;
+	}
+
+	public void setInit(boolean init) {
+		this.init = init;
 	}
 }

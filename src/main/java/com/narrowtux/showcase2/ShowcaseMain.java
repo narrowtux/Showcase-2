@@ -145,53 +145,57 @@ public class ShowcaseMain extends JavaPlugin {
 		try {
 			ArrayList<Object> dump = (ArrayList<Object>) yaml.load(new FileReader(getSaveFile()));
 			for(Object o:dump) {
-				HashMap<String, Object> item = (HashMap<String, Object>)o;
-				int x = (Integer)item.get("x");
-				int y = (Integer)item.get("y");
-				int z = (Integer)item.get("z");
-				String worldName = (String)item.get("world");
-				int environment = (Integer)item.get("environment");
-				int material = (Integer)item.get("material");
-				int data = (Integer)item.get("data");
-				String scType = (String)item.get("type");
-				
-				ArrayList<String> owners = (ArrayList<String>) item.get("owners");
-				
-				
-				World w = new WorldCreator(worldName).environment(Environment.getEnvironment(environment)).createWorld();
-				if(w == null) {
-					doLog("Couldn't find world "+worldName, Level.SEVERE);
-					continue;
-				}
-				Block b = w.getBlockAt(x,y,z);
-				if(b == null) {
-					doLog("Couldn't find block", Level.SEVERE);
-					continue;
-				}
-				ItemStack stack = new ItemStack(material, 1, (short) data);
-				ShowcaseType type = ShowcaseType.getType(scType);
-				if(type == null) {
-					doLog("Couldn't find type: "+scType, Level.SEVERE);
-					continue;
-				}
-				ShowcasePlayer player = ShowcasePlayer.getPlayer(owners.get(0));
-				Showcase sc = type.createShowcase(b, stack, player, new String[0]);
-				sc.setShowcaseType(type);
-				for(String name:owners) {
-					sc.addOwner(ShowcasePlayer.getPlayer(name));
-				}
-				try{
-					HashMap<String, Object> extra = (HashMap<String, Object>) item.get("extra");
-					if(extra != null) {
-						sc.doLoad(extra);
+				try {
+					HashMap<String, Object> item = (HashMap<String, Object>)o;
+					int x = (Integer)item.get("x");
+					int y = (Integer)item.get("y");
+					int z = (Integer)item.get("z");
+					String worldName = (String)item.get("world");
+					int environment = (Integer)item.get("environment");
+					int material = (Integer)item.get("material");
+					int data = (Integer)item.get("data");
+					String scType = (String)item.get("type");
+					
+					ArrayList<String> owners = (ArrayList<String>) item.get("owners");
+					
+					
+					World w = new WorldCreator(worldName).environment(Environment.getEnvironment(environment)).createWorld();
+					if(w == null) {
+						doLog("Couldn't find world "+worldName, Level.SEVERE);
+						continue;
 					}
+					Block b = w.getBlockAt(x,y,z);
+					if(b == null) {
+						doLog("Couldn't find block", Level.SEVERE);
+						continue;
+					}
+					ItemStack stack = new ItemStack(material, 1, (short) data);
+					ShowcaseType type = ShowcaseType.getType(scType);
+					if(type == null) {
+						doLog("Couldn't find type: "+scType, Level.SEVERE);
+						continue;
+					}
+					ShowcasePlayer player = ShowcasePlayer.getPlayer(owners.get(0));
+					Showcase sc = type.createShowcase(b, stack, player, new String[0]);
+					sc.setShowcaseType(type);
+					for(String name:owners) {
+						sc.addOwner(ShowcasePlayer.getPlayer(name));
+					}
+					try{
+						HashMap<String, Object> extra = (HashMap<String, Object>) item.get("extra");
+						if(extra != null) {
+							sc.doLoad(extra);
+						}
+					} catch(Exception e) {
+						doLog("Error on loading type "+scType, Level.SEVERE);
+						e.printStackTrace();
+						sc.remove();
+						continue;
+					}
+					addShowcase(sc);
 				} catch(Exception e) {
-					doLog("Error on loading type "+scType, Level.SEVERE);
-					e.printStackTrace();
-					sc.remove();
-					continue;
+					doLog("Problem with loading: "+e.getMessage() + " One Showcase is lost!", Level.SEVERE);
 				}
-				addShowcase(sc);	
 			}
 		} catch (FileNotFoundException e) {
 			doLog("Problem with loading: "+e.getMessage(), Level.SEVERE);
