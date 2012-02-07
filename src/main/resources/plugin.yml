@@ -7,6 +7,6 @@ main: com.narrowtux.showcase2.ShowcaseMain
 softdepend: [NarrowtuxLib]
 
 commands:
-  showcase:
-    aliases: [sc]
-    description: Access to all showcase commands
+    showcase:
+        aliases: [sc]
+        description: Access to all showcase commands
